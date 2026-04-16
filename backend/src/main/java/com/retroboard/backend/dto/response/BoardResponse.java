@@ -8,7 +8,8 @@ import java.util.List;
 public record BoardResponse(
         Long id,
         String name,
-        String sprintName,
+        Long teamId,
+        String teamName,
         LocalDateTime createdAt,
         List<CardResponse> cards
 ) {
@@ -16,7 +17,8 @@ public record BoardResponse(
         return new BoardResponse(
                 board.getId(),
                 board.getName(),
-                board.getSprintName(),
+                board.getTeam().getId(),
+                board.getTeam().getName(),
                 board.getCreatedAt(),
                 board.getCards().stream().map(CardResponse::from).toList()
         );

@@ -5,6 +5,9 @@ export interface AuthResponse {
   email: string
   fullName: string
   role: Role
+  companyId: number
+  companyName: string
+  inviteCode: string | null
 }
 
 export type ColumnType = 'WENT_WELL' | 'TO_IMPROVE' | 'ACTION_ITEMS'
@@ -15,13 +18,15 @@ export interface Card {
   columnType: ColumnType
   voteCount: number
   createdBy: string
+  anonymous: boolean
   createdAt: string
 }
 
 export interface Board {
   id: number
   name: string
-  sprintName: string
+  teamId: number
+  teamName: string
   createdAt: string
   cards: Card[]
 }

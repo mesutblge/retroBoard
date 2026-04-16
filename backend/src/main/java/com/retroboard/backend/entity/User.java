@@ -39,6 +39,10 @@ public class User implements UserDetails {
     @Builder.Default
     private Role role = Role.USER;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -49,6 +53,10 @@ public class User implements UserDetails {
 
     public boolean isAdmin() {
         return role == Role.ADMIN;
+    }
+
+    public Long getCompanyId() {
+        return company != null ? company.getId() : null;
     }
 
     @Override

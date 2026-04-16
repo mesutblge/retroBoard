@@ -4,9 +4,12 @@ import { register } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 
 export default function RegisterPage() {
+  const [mode, setMode] = useState<'create' | 'join'>('create')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [inviteCode, setInviteCode] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { setAuth } = useAuth()
@@ -17,8 +20,13 @@ export default function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      const res = await register(email, password, fullName)
-      setAuth(res.data.token, res.data.email, res.data.fullName, res.data.role)
+      const res = await register(
+        email, password, fullName,
+        mode === 'create' ? companyName : undefined,
+        mode === 'join' ? inviteCode : undefined
+      )
+      const d = res.data
+      setAuth(d.token, d.email, d.fullName, d.role, d.companyId, d.companyName, d.inviteCode)
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.error || 'Kayıt başarısız.')
@@ -42,7 +50,6 @@ export default function RegisterPage() {
         <div className="rounded-3xl overflow-hidden"
           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(30px)', boxShadow: '0 40px 80px rgba(0,0,0,0.5)' }}>
 
-          {/* Üst başlık bandı */}
           <div className="px-10 pt-10 pb-6 text-center"
             style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(99,102,241,0.15))', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-lg"
@@ -53,8 +60,28 @@ export default function RegisterPage() {
             <p className="text-slate-400 text-sm mt-1">RetroBoard'a katıl</p>
           </div>
 
-          {/* Form */}
           <div className="p-10">
+            {/* Mod seçimi */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', padding: '4px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              {([
+                { id: 'create', label: '🏢 Şirket Kur', desc: 'Admin ol' },
+                { id: 'join', label: '🔗 Katıl', desc: 'Davet koduyla' },
+              ] as const).map(opt => (
+                <button key={opt.id} type="button" onClick={() => setMode(opt.id)}
+                  style={{
+                    flex: 1, padding: '10px 8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                    transition: 'all 0.2s', fontSize: '13px', fontWeight: 700,
+                    background: mode === opt.id ? 'linear-gradient(135deg, #a855f7, #6366f1)' : 'transparent',
+                    color: mode === opt.id ? 'white' : '#64748b',
+                  }}>
+                  {opt.label}
+                  <span style={{ display: 'block', fontSize: '10px', fontWeight: 400, opacity: 0.8, marginTop: '2px' }}>
+                    {opt.desc}
+                  </span>
+                </button>
+              ))}
+            </div>
+
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               {[
                 { label: 'Ad Soyad', type: 'text', value: fullName, onChange: setFullName, placeholder: 'Mesut Bilge' },
@@ -74,6 +101,34 @@ export default function RegisterPage() {
                 </div>
               ))}
 
+              {mode === 'create' ? (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-widest">Şirket Adı</label>
+                  <input
+                    type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
+                    required placeholder="Acme Corp"
+                    className="w-full rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}
+                    onFocus={e => e.target.style.borderColor = '#a855f7'}
+                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
+                  />
+                  <p className="text-xs text-slate-600 mt-1">Şirket kurulunca admin olursun ve davet kodu üretilir.</p>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-widest">Davet Kodu</label>
+                  <input
+                    type="text" value={inviteCode} onChange={e => setInviteCode(e.target.value.toUpperCase())}
+                    required placeholder="ABCD1234" maxLength={8}
+                    className="w-full rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 outline-none transition-all font-mono tracking-widest"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}
+                    onFocus={e => e.target.style.borderColor = '#a855f7'}
+                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
+                  />
+                  <p className="text-xs text-slate-600 mt-1">Admin'den aldığın 8 haneli kodu gir.</p>
+                </div>
+              )}
+
               {error && (
                 <div className="px-4 py-3 rounded-xl text-sm text-red-300"
                   style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)' }}>
@@ -84,7 +139,7 @@ export default function RegisterPage() {
               <button type="submit" disabled={loading}
                 className="w-full text-white font-bold py-4 rounded-xl text-sm tracking-wide transition-all active:scale-[0.98] disabled:opacity-50 mt-1"
                 style={{ background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)', boxShadow: '0 8px 30px rgba(168,85,247,0.35)' }}>
-                {loading ? 'Kaydediliyor...' : 'Kayıt Ol →'}
+                {loading ? 'Kaydediliyor...' : mode === 'create' ? 'Şirket Kur ve Kayıt Ol →' : 'Katıl →'}
               </button>
             </form>
 

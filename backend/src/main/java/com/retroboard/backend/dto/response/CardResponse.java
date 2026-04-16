@@ -10,6 +10,7 @@ public record CardResponse(
         Card.ColumnType columnType,
         int voteCount,
         String createdBy,
+        boolean anonymous,
         LocalDateTime createdAt
 ) {
     public static CardResponse from(Card card) {
@@ -18,7 +19,8 @@ public record CardResponse(
                 card.getContent(),
                 card.getColumnType(),
                 card.getVoteCount(),
-                card.getCreatedBy().getFullName(),
+                card.isAnonymous() ? "Anonim" : card.getCreatedBy().getFullName(),
+                card.isAnonymous(),
                 card.getCreatedAt()
         );
     }

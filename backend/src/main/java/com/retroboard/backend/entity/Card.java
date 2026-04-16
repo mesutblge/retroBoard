@@ -27,6 +27,10 @@ public class Card {
 
     @Column(nullable = false)
     @Builder.Default
+    private boolean anonymous = false;
+
+    @Column(nullable = false)
+    @Builder.Default
     private int voteCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)

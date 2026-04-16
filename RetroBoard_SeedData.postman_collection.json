@@ -1,0 +1,575 @@
+{
+  "info": {
+    "name": "RetroBoard - Seed Data",
+    "description": "Sırayla çalıştır: Collection Runner > Run All. Tüm örnek datayı DB'ye yazar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base", "value": "http://localhost:8080/api" },
+    { "key": "adminToken1", "value": "" },
+    { "key": "adminToken2", "value": "" },
+    { "key": "userToken1", "value": "" },
+    { "key": "userToken2", "value": "" },
+    { "key": "inviteCode1", "value": "" },
+    { "key": "inviteCode2", "value": "" },
+    { "key": "userId1", "value": "" },
+    { "key": "userId2", "value": "" },
+    { "key": "teamId1", "value": "" },
+    { "key": "teamId2", "value": "" },
+    { "key": "boardId1", "value": "" },
+    { "key": "boardId2", "value": "" },
+    { "key": "cardId1", "value": "" },
+    { "key": "cardId2", "value": "" },
+    { "key": "cardId3", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1 - Acme Corp Kurulum",
+      "item": [
+        {
+          "name": "1.1 Admin Kayıt → Acme Corp",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('adminToken1', j.token);",
+            "pm.collectionVariables.set('inviteCode1', j.inviteCode);",
+            "console.log('✅ Acme Admin token:', j.token);",
+            "console.log('🔑 Acme Invite Code:', j.inviteCode);",
+            "pm.test('Kayıt başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@acme.com\",\n  \"password\": \"acme1234\",\n  \"fullName\": \"Ahmet Yılmaz\",\n  \"companyName\": \"Acme Corp\"\n}" },
+            "url": { "raw": "{{base}}/auth/register", "host": ["{{base}}"], "path": ["auth","register"] }
+          }
+        },
+        {
+          "name": "1.2 User1 Kayıt → Acme Corp (inviteCode ile)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('userToken1', j.token);",
+            "console.log('✅ User1 token:', j.token);",
+            "pm.test('Kayıt başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"mehmet@acme.com\",\n  \"password\": \"pass1234\",\n  \"fullName\": \"Mehmet Demir\",\n  \"inviteCode\": \"{{inviteCode1}}\"\n}" },
+            "url": { "raw": "{{base}}/auth/register", "host": ["{{base}}"], "path": ["auth","register"] }
+          }
+        },
+        {
+          "name": "1.3 User2 Kayıt → Acme Corp (inviteCode ile)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('userToken2', j.token);",
+            "console.log('✅ User2 token:', j.token);",
+            "pm.test('Kayıt başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ayse@acme.com\",\n  \"password\": \"pass1234\",\n  \"fullName\": \"Ayşe Kaya\",\n  \"inviteCode\": \"{{inviteCode1}}\"\n}" },
+            "url": { "raw": "{{base}}/auth/register", "host": ["{{base}}"], "path": ["auth","register"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - TechStart Kurulum",
+      "item": [
+        {
+          "name": "2.1 Admin Kayıt → TechStart",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('adminToken2', j.token);",
+            "pm.collectionVariables.set('inviteCode2', j.inviteCode);",
+            "console.log('✅ TechStart Admin token:', j.token);",
+            "console.log('🔑 TechStart Invite Code:', j.inviteCode);",
+            "pm.test('Kayıt başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@techstart.com\",\n  \"password\": \"tech1234\",\n  \"fullName\": \"Ali Çelik\",\n  \"companyName\": \"TechStart\"\n}" },
+            "url": { "raw": "{{base}}/auth/register", "host": ["{{base}}"], "path": ["auth","register"] }
+          }
+        },
+        {
+          "name": "2.2 User Kayıt → TechStart (inviteCode ile)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kayıt başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"zeynep@techstart.com\",\n  \"password\": \"pass1234\",\n  \"fullName\": \"Zeynep Arslan\",\n  \"inviteCode\": \"{{inviteCode2}}\"\n}" },
+            "url": { "raw": "{{base}}/auth/register", "host": ["{{base}}"], "path": ["auth","register"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Login",
+      "item": [
+        {
+          "name": "3.1 Acme Admin Login",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('adminToken1', j.token);",
+            "pm.collectionVariables.set('inviteCode1', j.inviteCode);",
+            "console.log('✅ Acme Admin login OK');",
+            "pm.test('Login başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@acme.com\",\n  \"password\": \"acme1234\"\n}" },
+            "url": { "raw": "{{base}}/auth/login", "host": ["{{base}}"], "path": ["auth","login"] }
+          }
+        },
+        {
+          "name": "3.2 TechStart Admin Login",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('adminToken2', j.token);",
+            "console.log('✅ TechStart Admin login OK');",
+            "pm.test('Login başarılı', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@techstart.com\",\n  \"password\": \"tech1234\"\n}" },
+            "url": { "raw": "{{base}}/auth/login", "host": ["{{base}}"], "path": ["auth","login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - Acme Corp Takımlar",
+      "item": [
+        {
+          "name": "4.1 Kullanıcıları Getir (userId1 & userId2 çek)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var users = pm.response.json();",
+            "pm.test('Kullanıcılar geldi', () => pm.response.to.have.status(200));",
+            "var u1 = users.find(u => u.email === 'mehmet@acme.com');",
+            "var u2 = users.find(u => u.email === 'ayse@acme.com');",
+            "if (u1) { pm.collectionVariables.set('userId1', u1.id); console.log('userId1 (Mehmet):', u1.id); }",
+            "if (u2) { pm.collectionVariables.set('userId2', u2.id); console.log('userId2 (Ayşe):', u2.id); }"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/users", "host": ["{{base}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "4.2 Takım Oluştur → Backend Takımı",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('teamId1', j.id);",
+            "console.log('✅ teamId1 (Backend):', j.id);",
+            "pm.test('Takım oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Backend Takımı\"\n}" },
+            "url": { "raw": "{{base}}/teams", "host": ["{{base}}"], "path": ["teams"] }
+          }
+        },
+        {
+          "name": "4.3 Takım Oluştur → Frontend Takımı",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('teamId2', j.id);",
+            "console.log('✅ teamId2 (Frontend):', j.id);",
+            "pm.test('Takım oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Frontend Takımı\"\n}" },
+            "url": { "raw": "{{base}}/teams", "host": ["{{base}}"], "path": ["teams"] }
+          }
+        },
+        {
+          "name": "4.4 Mehmet → Backend Takımı'na Ekle",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Üye eklendi', () => pm.response.to.have.status(200));",
+            "console.log('✅ Mehmet Backend takımına eklendi');"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": {
+              "raw": "{{base}}/teams/{{teamId1}}/members/{{userId1}}",
+              "host": ["{{base}}"], "path": ["teams","{{teamId1}}","members","{{userId1}}"]
+            }
+          }
+        },
+        {
+          "name": "4.5 Ayşe → Frontend Takımı'na Ekle",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Üye eklendi', () => pm.response.to.have.status(200));",
+            "console.log('✅ Ayşe Frontend takımına eklendi');"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": {
+              "raw": "{{base}}/teams/{{teamId2}}/members/{{userId2}}",
+              "host": ["{{base}}"], "path": ["teams","{{teamId2}}","members","{{userId2}}"]
+            }
+          }
+        },
+        {
+          "name": "4.6 Takımları Listele (kontrol)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Takımlar geldi', () => pm.response.to.have.status(200));",
+            "console.log('Takımlar:', JSON.stringify(pm.response.json()));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/teams", "host": ["{{base}}"], "path": ["teams"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 - Acme Corp Boardlar",
+      "item": [
+        {
+          "name": "5.1 Board Oluştur → Backend Q2 Sprint 1",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('boardId1', j.id);",
+            "console.log('✅ boardId1:', j.id);",
+            "pm.test('Board oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Q2 Sprint 1 Retro\",\n  \"sprintName\": \"Sprint 1\",\n  \"teamId\": {{teamId1}}\n}" },
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        },
+        {
+          "name": "5.2 Board Oluştur → Frontend Q2 Sprint 1",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('boardId2', j.id);",
+            "console.log('✅ boardId2:', j.id);",
+            "pm.test('Board oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Frontend Sprint 1 Retro\",\n  \"sprintName\": \"Sprint 1\",\n  \"teamId\": {{teamId2}}\n}" },
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        },
+        {
+          "name": "5.3 Kart Ekle (Board1 - WENT_WELL) [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('cardId1', j.id);",
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Takım içi iletişim çok güçlüydü\",\n  \"columnType\": \"WENT_WELL\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.4 Kart Ekle (Board1 - WENT_WELL) [User1]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Code review süreçleri harika işledi\",\n  \"columnType\": \"WENT_WELL\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.5 Kart Ekle (Board1 - TO_IMPROVE) [User1]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('cardId2', j.id);",
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Test coverage artırılmalı, şu an %45\",\n  \"columnType\": \"TO_IMPROVE\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.6 Kart Ekle (Board1 - TO_IMPROVE) [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Deploy süreci çok uzun sürüyor, otomatize edilmeli\",\n  \"columnType\": \"TO_IMPROVE\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.7 Kart Ekle (Board1 - ACTION_ITEMS) [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('cardId3', j.id);",
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"GitHub Actions ile CI/CD pipeline kurulacak\",\n  \"columnType\": \"ACTION_ITEMS\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.8 Kart Ekle (Board1 - ACTION_ITEMS) [User1]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Unit test coverage hedefi %80 olarak belirlendi\",\n  \"columnType\": \"ACTION_ITEMS\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId1}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId1}}","cards"] }
+          }
+        },
+        {
+          "name": "5.9 Kart Ekle (Board2 - WENT_WELL) [User2]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken2}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Yeni UI bileşen kütüphanesi çok verimli oldu\",\n  \"columnType\": \"WENT_WELL\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId2}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId2}}","cards"] }
+          }
+        },
+        {
+          "name": "5.10 Kart Ekle (Board2 - TO_IMPROVE) [User2]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken2}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Mobile responsive tasarım eksik kaldı\",\n  \"columnType\": \"TO_IMPROVE\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId2}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId2}}","cards"] }
+          }
+        },
+        {
+          "name": "5.11 Kart Ekle (Board2 - ACTION_ITEMS) [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Kart eklendi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken1}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Figma'da mobile tasarımlar hazırlanacak\",\n  \"columnType\": \"ACTION_ITEMS\"\n}" },
+            "url": { "raw": "{{base}}/boards/{{boardId2}}/cards", "host": ["{{base}}"], "path": ["boards","{{boardId2}}","cards"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6 - Oylamalar",
+      "item": [
+        {
+          "name": "6.1 Kart1'e Oy Ver",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Oy verildi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken1}}" }],
+            "url": { "raw": "{{base}}/boards/cards/{{cardId1}}/vote", "host": ["{{base}}"], "path": ["boards","cards","{{cardId1}}","vote"] }
+          }
+        },
+        {
+          "name": "6.2 Kart1'e Tekrar Oy Ver",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Oy verildi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/boards/cards/{{cardId1}}/vote", "host": ["{{base}}"], "path": ["boards","cards","{{cardId1}}","vote"] }
+          }
+        },
+        {
+          "name": "6.3 Kart2'ye Oy Ver",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Oy verildi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/boards/cards/{{cardId2}}/vote", "host": ["{{base}}"], "path": ["boards","cards","{{cardId2}}","vote"] }
+          }
+        },
+        {
+          "name": "6.4 Kart3'e Oy Ver",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Oy verildi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/boards/cards/{{cardId3}}/vote", "host": ["{{base}}"], "path": ["boards","cards","{{cardId3}}","vote"] }
+          }
+        },
+        {
+          "name": "6.5 Kart3'e Tekrar Oy Ver",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Oy verildi', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken1}}" }],
+            "url": { "raw": "{{base}}/boards/cards/{{cardId3}}/vote", "host": ["{{base}}"], "path": ["boards","cards","{{cardId3}}","vote"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7 - TechStart Boardları",
+      "item": [
+        {
+          "name": "7.1 TechStart Takım Oluştur",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "pm.collectionVariables.set('techTeamId', j.id);",
+            "console.log('✅ TechStart teamId:', j.id);",
+            "pm.test('Takım oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken2}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Core Team\"\n}" },
+            "url": { "raw": "{{base}}/teams", "host": ["{{base}}"], "path": ["teams"] }
+          }
+        },
+        {
+          "name": "7.2 TechStart Board Oluştur",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "console.log('✅ TechStart boardId:', j.id);",
+            "pm.test('Board oluşturuldu', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken2}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"TechStart Sprint 1 Retro\",\n  \"sprintName\": \"Sprint 1\",\n  \"teamId\": {{techTeamId}}\n}" },
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8 - Son Kontrol",
+      "item": [
+        {
+          "name": "8.1 Acme Board Listesi",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var boards = pm.response.json();",
+            "pm.test('Boardlar geldi', () => pm.response.to.have.status(200));",
+            "console.log('Acme Board sayısı:', boards.length);"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken1}}" }],
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        },
+        {
+          "name": "8.2 TechStart Board Listesi",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var boards = pm.response.json();",
+            "pm.test('Boardlar geldi', () => pm.response.to.have.status(200));",
+            "console.log('TechStart Board sayısı:', boards.length);",
+            "console.log('✅ Seed data tamamlandı!');"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken2}}" }],
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        },
+        {
+          "name": "8.3 Mehmet Boardlarını Gör (sadece Backend)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var boards = pm.response.json();",
+            "pm.test('Boardlar geldi', () => pm.response.to.have.status(200));",
+            "console.log('Mehmet gördüğü boardlar:', boards.map(b => b.name));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken1}}" }],
+            "url": { "raw": "{{base}}/boards", "host": ["{{base}}"], "path": ["boards"] }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -28,13 +28,14 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardResponse>> getAllBoards() {
-        return ResponseEntity.ok(boardService.getAllBoards());
+    public ResponseEntity<List<BoardResponse>> getBoards(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(boardService.getBoards(user));
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long boardId) {
-        return ResponseEntity.ok(boardService.getBoard(boardId));
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long boardId,
+                                                   @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(boardService.getBoard(boardId, user));
     }
 
     @DeleteMapping("/{boardId}")

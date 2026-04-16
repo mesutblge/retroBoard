@@ -6,5 +6,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateCardRequest(
         @NotBlank String content,
-        @NotNull ColumnType columnType
+        @NotNull ColumnType columnType,
+        boolean anonymous
 ) {}

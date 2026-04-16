@@ -6,5 +6,8 @@ public record AuthResponse(
         String token,
         String email,
         String fullName,
-        User.Role role
+        User.Role role,
+        Long companyId,
+        String companyName,
+        String inviteCode
 ) {}
