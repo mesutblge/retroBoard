@@ -184,7 +184,7 @@ export default function BoardPage() {
       </header>
 
       {/* Kolonlar */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 32px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', position: 'relative', zIndex: 1 }}>
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 32px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', position: 'relative', zIndex: 1, alignItems: 'start' }}>
         {COLUMNS.map(col => {
           const cards = cardsOf(col.type)
           return (
@@ -210,7 +210,7 @@ export default function BoardPage() {
               </div>
 
               {/* Kartlar */}
-              <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+              <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {cards.length === 0 ? (
                   <div style={{ padding: '28px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '26px', opacity: 0.25 }}>{col.emoji}</span>
