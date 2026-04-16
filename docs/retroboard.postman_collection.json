@@ -6,11 +6,13 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080"
+      "value": "http://localhost:8080",
+      "type": "string"
     },
     {
       "key": "token",
-      "value": ""
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -24,10 +26,15 @@
             "header": [
               { "key": "Content-Type", "value": "application/json" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/auth/register" },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"mesut@retroboard.com\",\n  \"password\": \"123456\",\n  \"fullName\": \"Mesut Bilge\"\n}"
+              "raw": "{\n  \"email\": \"mesut@retroboard.com\",\n  \"password\": \"123456\",\n  \"fullName\": \"Mesut Bilge\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -49,10 +56,15 @@
             "header": [
               { "key": "Content-Type", "value": "application/json" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/auth/login" },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"mesut@retroboard.com\",\n  \"password\": \"123456\"\n}"
+              "raw": "{\n  \"email\": \"mesut@retroboard.com\",\n  \"password\": \"123456\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         }
@@ -69,10 +81,15 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards" },
+            "url": {
+              "raw": "{{baseUrl}}/api/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Sprint 1 Retro\",\n  \"sprintName\": \"Sprint 1\"\n}"
+              "raw": "{\n  \"name\": \"Sprint 1 Retro\",\n  \"sprintName\": \"Sprint 1\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -83,7 +100,11 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards" }
+            "url": {
+              "raw": "{{baseUrl}}/api/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards"]
+            }
           }
         },
         {
@@ -93,7 +114,11 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/1" }
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "1"]
+            }
           }
         },
         {
@@ -103,7 +128,11 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/1" }
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "1"]
+            }
           }
         }
       ]
@@ -119,10 +148,15 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/1/cards" },
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/1/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "1", "cards"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"CI/CD pipeline çok hızlı\",\n  \"columnType\": \"WENT_WELL\"\n}"
+              "raw": "{\n  \"content\": \"CI/CD pipeline çok hızlı\",\n  \"columnType\": \"WENT_WELL\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -134,10 +168,15 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/1/cards" },
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/1/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "1", "cards"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"Code review süreci uzun\",\n  \"columnType\": \"TO_IMPROVE\"\n}"
+              "raw": "{\n  \"content\": \"Code review süreci uzun\",\n  \"columnType\": \"TO_IMPROVE\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -149,10 +188,15 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/1/cards" },
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/1/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "1", "cards"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"Haftalık teknik toplantı kur\",\n  \"columnType\": \"ACTION_ITEMS\"\n}"
+              "raw": "{\n  \"content\": \"Haftalık teknik toplantı kur\",\n  \"columnType\": \"ACTION_ITEMS\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -163,7 +207,11 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/cards/1/vote" }
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/cards/1/vote",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "cards", "1", "vote"]
+            }
           }
         },
         {
@@ -173,7 +221,11 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/api/boards/cards/1" }
+            "url": {
+              "raw": "{{baseUrl}}/api/boards/cards/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "boards", "cards", "1"]
+            }
           }
         }
       ]
