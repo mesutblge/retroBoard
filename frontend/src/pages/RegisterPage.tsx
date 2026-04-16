@@ -36,116 +36,180 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{
-      background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)'
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+      padding: '24px',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%)', filter: 'blur(40px)' }} />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.2), transparent 70%)', filter: 'blur(40px)' }} />
-      </div>
+      {/* Arka plan glow */}
+      <div style={{ position: 'absolute', top: '-200px', right: '-200px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.18), transparent 65%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-200px', left: '-200px', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.18), transparent 65%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
-      <div className="relative z-10 w-full max-w-md mx-auto px-6">
-        <div className="rounded-3xl overflow-hidden"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(30px)', boxShadow: '0 40px 80px rgba(0,0,0,0.5)' }}>
+      <div style={{
+        position: 'relative', zIndex: 1,
+        width: '100%', maxWidth: '460px',
+        borderRadius: '28px', overflow: 'hidden',
+        boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.07)',
+        background: 'rgba(255,255,255,0.05)',
+        backdropFilter: 'blur(30px)',
+      }}>
 
-          <div className="px-10 pt-10 pb-6 text-center"
-            style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(99,102,241,0.15))', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-lg"
-              style={{ background: 'linear-gradient(135deg, #a855f7, #6366f1)', boxShadow: '0 8px 25px rgba(168,85,247,0.4)' }}>
-              🔄
-            </div>
-            <h2 className="text-2xl font-black text-white">Hesap Oluştur</h2>
-            <p className="text-slate-400 text-sm mt-1">RetroBoard'a katıl</p>
+        {/* Üst band */}
+        <div style={{
+          padding: '36px 40px 28px',
+          background: 'linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(99,102,241,0.2) 100%)',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          textAlign: 'center',
+        }}>
+          <div style={{
+            width: '58px', height: '58px', borderRadius: '16px',
+            background: 'linear-gradient(135deg, #a855f7, #6366f1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '26px', margin: '0 auto 14px',
+            boxShadow: '0 8px 25px rgba(168,85,247,0.45)',
+          }}>🔄</div>
+          <h1 style={{ fontSize: '22px', fontWeight: 900, color: 'white', margin: '0 0 4px', letterSpacing: '-0.3px' }}>Hesap Oluştur</h1>
+          <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>RetroBoard'a katıl</p>
+        </div>
+
+        {/* Form alanı */}
+        <div style={{ padding: '28px 40px 36px' }}>
+
+          {/* Mod toggle */}
+          <div style={{
+            display: 'flex', gap: '6px',
+            padding: '5px', borderRadius: '14px',
+            background: 'rgba(0,0,0,0.2)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            marginBottom: '24px',
+          }}>
+            {([
+              { id: 'create' as const, icon: '🏢', label: 'Şirket Kur', sub: 'Admin hesabı' },
+              { id: 'join' as const, icon: '🔗', label: 'Katıl', sub: 'Davet koduyla' },
+            ]).map(opt => (
+              <button key={opt.id} type="button" onClick={() => setMode(opt.id)}
+                style={{
+                  flex: 1, padding: '10px 12px', borderRadius: '10px',
+                  border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                  background: mode === opt.id
+                    ? 'linear-gradient(135deg, #a855f7, #6366f1)'
+                    : 'transparent',
+                  boxShadow: mode === opt.id ? '0 4px 14px rgba(168,85,247,0.4)' : 'none',
+                }}>
+                <div style={{ fontSize: '15px', marginBottom: '2px' }}>{opt.icon}</div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: mode === opt.id ? 'white' : '#64748b', lineHeight: 1.2 }}>{opt.label}</div>
+                <div style={{ fontSize: '11px', color: mode === opt.id ? 'rgba(255,255,255,0.7)' : '#475569', marginTop: '1px' }}>{opt.sub}</div>
+              </button>
+            ))}
           </div>
 
-          <div className="p-10">
-            {/* Mod seçimi */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', padding: '4px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              {([
-                { id: 'create', label: '🏢 Şirket Kur', desc: 'Admin ol' },
-                { id: 'join', label: '🔗 Katıl', desc: 'Davet koduyla' },
-              ] as const).map(opt => (
-                <button key={opt.id} type="button" onClick={() => setMode(opt.id)}
-                  style={{
-                    flex: 1, padding: '10px 8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    transition: 'all 0.2s', fontSize: '13px', fontWeight: 700,
-                    background: mode === opt.id ? 'linear-gradient(135deg, #a855f7, #6366f1)' : 'transparent',
-                    color: mode === opt.id ? 'white' : '#64748b',
-                  }}>
-                  {opt.label}
-                  <span style={{ display: 'block', fontSize: '10px', fontWeight: 400, opacity: 0.8, marginTop: '2px' }}>
-                    {opt.desc}
-                  </span>
-                </button>
-              ))}
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+            {/* Ad Soyad */}
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Ad Soyad
+              </label>
+              <input
+                type="text" value={fullName} onChange={e => setFullName(e.target.value)}
+                required placeholder="Mesut Bilge"
+                style={{ width: '100%', borderRadius: '12px', padding: '12px 16px', fontSize: '14px', color: 'white', outline: 'none', background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.1)', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
+                onFocus={e => e.target.style.borderColor = '#a855f7'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {[
-                { label: 'Ad Soyad', type: 'text', value: fullName, onChange: setFullName, placeholder: 'Mesut Bilge' },
-                { label: 'Email', type: 'email', value: email, onChange: setEmail, placeholder: 'ornek@sirket.com' },
-                { label: 'Şifre', type: 'password', value: password, onChange: setPassword, placeholder: 'En az 6 karakter' },
-              ].map(f => (
-                <div key={f.label}>
-                  <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-widest">{f.label}</label>
-                  <input
-                    type={f.type} value={f.value} onChange={e => f.onChange(e.target.value)}
-                    required minLength={f.type === 'password' ? 6 : undefined} placeholder={f.placeholder}
-                    className="w-full rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 outline-none transition-all"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}
-                    onFocus={e => e.target.style.borderColor = '#a855f7'}
-                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
-                  />
-                </div>
-              ))}
+            {/* Email */}
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Email
+              </label>
+              <input
+                type="email" value={email} onChange={e => setEmail(e.target.value)}
+                required placeholder="ornek@sirket.com"
+                style={{ width: '100%', borderRadius: '12px', padding: '12px 16px', fontSize: '14px', color: 'white', outline: 'none', background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.1)', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
+                onFocus={e => e.target.style.borderColor = '#a855f7'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
+            </div>
 
-              {mode === 'create' ? (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-widest">Şirket Adı</label>
-                  <input
-                    type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
-                    required placeholder="Acme Corp"
-                    className="w-full rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 outline-none transition-all"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}
-                    onFocus={e => e.target.style.borderColor = '#a855f7'}
-                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
-                  />
-                  <p className="text-xs text-slate-600 mt-1">Şirket kurulunca admin olursun ve davet kodu üretilir.</p>
-                </div>
-              ) : (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-widest">Davet Kodu</label>
-                  <input
-                    type="text" value={inviteCode} onChange={e => setInviteCode(e.target.value.toUpperCase())}
-                    required placeholder="ABCD1234" maxLength={8}
-                    className="w-full rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 outline-none transition-all font-mono tracking-widest"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}
-                    onFocus={e => e.target.style.borderColor = '#a855f7'}
-                    onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
-                  />
-                  <p className="text-xs text-slate-600 mt-1">Admin'den aldığın 8 haneli kodu gir.</p>
-                </div>
-              )}
+            {/* Şifre */}
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Şifre
+              </label>
+              <input
+                type="password" value={password} onChange={e => setPassword(e.target.value)}
+                required minLength={6} placeholder="En az 6 karakter"
+                style={{ width: '100%', borderRadius: '12px', padding: '12px 16px', fontSize: '14px', color: 'white', outline: 'none', background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.1)', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
+                onFocus={e => e.target.style.borderColor = '#a855f7'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
+            </div>
 
-              {error && (
-                <div className="px-4 py-3 rounded-xl text-sm text-red-300"
-                  style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)' }}>
-                  ⚠️ {error}
-                </div>
-              )}
+            {/* Şirket adı veya davet kodu */}
+            {mode === 'create' ? (
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  Şirket Adı
+                </label>
+                <input
+                  type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
+                  required placeholder="Acme Corp"
+                  style={{ width: '100%', borderRadius: '12px', padding: '12px 16px', fontSize: '14px', color: 'white', outline: 'none', background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.1)', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
+                  onFocus={e => e.target.style.borderColor = '#a855f7'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+                <p style={{ fontSize: '11px', color: '#475569', margin: '5px 0 0', paddingLeft: '4px' }}>
+                  Şirket kurulur, sana admin + davet kodu verilir
+                </p>
+              </div>
+            ) : (
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  Davet Kodu
+                </label>
+                <input
+                  type="text" value={inviteCode} onChange={e => setInviteCode(e.target.value.toUpperCase())}
+                  required placeholder="ABCD1234" maxLength={8}
+                  style={{ width: '100%', borderRadius: '12px', padding: '12px 16px', fontSize: '18px', fontWeight: 800, color: '#c084fc', outline: 'none', background: 'rgba(168,85,247,0.08)', border: '1.5px solid rgba(168,85,247,0.2)', transition: 'border-color 0.2s', boxSizing: 'border-box', letterSpacing: '0.25em', textAlign: 'center', fontFamily: 'monospace' }}
+                  onFocus={e => e.target.style.borderColor = '#a855f7'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(168,85,247,0.2)'}
+                />
+                <p style={{ fontSize: '11px', color: '#475569', margin: '5px 0 0', paddingLeft: '4px' }}>
+                  Adminden aldığın 8 haneli kodu gir
+                </p>
+              </div>
+            )}
 
-              <button type="submit" disabled={loading}
-                className="w-full text-white font-bold py-4 rounded-xl text-sm tracking-wide transition-all active:scale-[0.98] disabled:opacity-50 mt-1"
-                style={{ background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)', boxShadow: '0 8px 30px rgba(168,85,247,0.35)' }}>
-                {loading ? 'Kaydediliyor...' : mode === 'create' ? 'Şirket Kur ve Kayıt Ol →' : 'Katıl →'}
-              </button>
-            </form>
+            {error && (
+              <div style={{ padding: '11px 14px', borderRadius: '12px', fontSize: '13px', color: '#fca5a5', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                ⚠️ {error}
+              </div>
+            )}
 
-            <p className="text-sm text-slate-500 mt-6 text-center">
+            <button type="submit" disabled={loading} style={{
+              width: '100%', padding: '14px', borderRadius: '14px', marginTop: '4px',
+              fontSize: '14px', fontWeight: 700, color: 'white',
+              background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
+              border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: '0 8px 25px rgba(168,85,247,0.35)',
+              opacity: loading ? 0.6 : 1,
+              transition: 'all 0.2s', letterSpacing: '0.02em',
+            }}>
+              {loading ? 'Kaydediliyor...' : mode === 'create' ? 'Şirket Kur ve Devam Et →' : 'Katıl →'}
+            </button>
+          </form>
+
+          <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>
+            <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>
               Zaten hesabın var mı?{' '}
-              <Link to="/login" className="font-semibold hover:text-purple-300 transition-colors" style={{ color: '#a855f7' }}>
+              <Link to="/login" style={{ color: '#a855f7', fontWeight: 700, textDecoration: 'none' }}>
                 Giriş yap
               </Link>
             </p>

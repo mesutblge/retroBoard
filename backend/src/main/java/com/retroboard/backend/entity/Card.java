@@ -25,7 +25,7 @@ public class Card {
     @Column(nullable = false)
     private ColumnType columnType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     @Builder.Default
     private boolean anonymous = false;
 
