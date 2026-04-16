@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
 import '../models/models.dart';
 
@@ -68,6 +70,12 @@ class _TeamsScreenState extends State<TeamsScreen> {
         elevation: 0,
         leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
         title: const Text('Takımlar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Color(0xFFf87171)),
+            onPressed: () { context.read<AuthProvider>().logout(); context.go('/login'); },
+          ),
+        ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator(color: Color(0xFFa855f7)))

@@ -122,6 +122,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           if (auth.isAdmin)
             IconButton(icon: const Icon(Icons.group, color: Color(0xFF818cf8)), onPressed: () => context.push('/teams')),
           IconButton(icon: const Icon(Icons.person_outline, color: Colors.white54), onPressed: () => context.push('/profile')),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Color(0xFFf87171)),
+            onPressed: () { auth.logout(); context.go('/login'); },
+          ),
         ],
       ),
       body: _loading

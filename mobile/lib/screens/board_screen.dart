@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
@@ -63,7 +64,7 @@ class _BoardScreenState extends State<BoardScreen> with SingleTickerProviderStat
     final token = context.read<AuthProvider>().auth?.token ?? '';
     _stomp = StompClient(
       config: StompConfig.sockJS(
-        url: 'http://10.0.2.2:8080/ws',
+        url: 'http://localhost:8080/ws',
         onConnect: (frame) {
           _stomp!.subscribe(
             destination: '/topic/board/${widget.boardId}',
@@ -201,6 +202,10 @@ class _BoardScreenState extends State<BoardScreen> with SingleTickerProviderStat
           IconButton(
             icon: Icon(_anonymous ? Icons.theater_comedy : Icons.person_outline, color: _anonymous ? const Color(0xFFc084fc) : Colors.white54),
             onPressed: () => setState(() => _anonymous = !_anonymous),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Color(0xFFf87171)),
+            onPressed: () { auth.logout(); context.go('/login'); },
           ),
         ],
         bottom: TabBar(

@@ -66,7 +66,7 @@ export default function BoardPage() {
   const { id } = useParams<{ id: string }>()
   const boardId = Number(id)
   const navigate = useNavigate()
-  const { isAdmin, fullName } = useAuth()
+  const { isAdmin, fullName, logout } = useAuth()
   const [board, setBoard] = useState<Board | null>(null)
   const [newCard, setNewCard] = useState<{ [k in ColumnType]?: string }>({})
   const [anonymous, setAnonymous] = useState(false)
@@ -343,6 +343,17 @@ export default function BoardPage() {
           onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'}>
           <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'linear-gradient(135deg, #a855f7, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: 'white' }}>{initials}</div>
           <span style={{ fontSize: '12px', color: '#cbd5e1', fontWeight: 500 }}>{fullName}</span>
+        </button>
+
+        <button onClick={() => { logout(); navigate('/login') }} style={{
+          padding: '7px 14px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+          fontSize: '12px', fontWeight: 700, flexShrink: 0, transition: 'all 0.2s',
+          background: 'rgba(239,68,68,0.1)', color: '#fca5a5',
+          outline: '1px solid rgba(239,68,68,0.25)',
+        }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.2)'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.1)'}>
+          ↩ Çıkış
         </button>
       </header>
 
