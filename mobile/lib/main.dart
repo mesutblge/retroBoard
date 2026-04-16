@@ -26,14 +26,30 @@ void main() async {
   );
 }
 
-class RetroApp extends StatelessWidget {
+class RetroApp extends StatefulWidget {
   final AuthProvider auth;
   const RetroApp({super.key, required this.auth});
 
   @override
-  Widget build(BuildContext context) {
-    final router = GoRouter(
-      initialLocation: auth.isLoggedIn ? '/dashboard' : '/login',
+  State<RetroApp> createState() => _RetroAppState();
+}
+
+class _RetroAppState extends State<RetroApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = GoRouter(
+      initialLocation: widget.auth.isLoggedIn ? '/dashboard' : '/login',
+      refreshListenable: widget.auth,
+      redirect: (context, state) {
+        final loggedIn = widget.auth.isLoggedIn;
+        final onAuth = state.matchedLocation == '/login' || state.matchedLocation == '/register';
+        if (!loggedIn && !onAuth) return '/login';
+        if (loggedIn && onAuth) return '/dashboard';
+        return null;
+      },
       routes: [
         GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
         GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
@@ -43,7 +59,16 @@ class RetroApp extends StatelessWidget {
         GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
       ],
     );
+  }
 
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'RetroBoard',
       debugShowCheckedModeBanner: false,
@@ -51,7 +76,7 @@ class RetroApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(primary: Color(0xFFa855f7), surface: Color(0xFF0f0c29)),
         scaffoldBackgroundColor: const Color(0xFF0f0c29),
       ),
-      routerConfig: router,
+      routerConfig: _router,
     );
   }
 }
