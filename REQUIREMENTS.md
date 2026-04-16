@@ -14,9 +14,10 @@ gerçek zamanlı ve çok platformlu bir board uygulaması.
 | Backend   | Java 21 + Spring Boot 3 |
 | Frontend  | React (Vite) + TypeScript |
 | Mobile    | Flutter              |
-| Veritabanı | TBD                 |
-| Gerçek Zamanlı | TBD (WebSocket / SSE) |
-| Auth      | TBD                  |
+| Veritabanı | PostgreSQL           |
+| Gerçek Zamanlı | Spring WebSocket + STOMP |
+| Auth      | JWT (kendi sistemi)  |
+| CI/CD     | GitHub Actions       |
 
 ---
 
@@ -67,12 +68,15 @@ gerçek zamanlı ve çok platformlu bir board uygulaması.
 
 ---
 
-## Açık Kararlar (TBD)
+## Kararlaştırılan Teknik Seçimler
 
-- Veritabanı: PostgreSQL mu? MySQL mi?
-- Auth provider: kendi mi, OAuth (Google) mi?
-- Deploy: Docker + VPS mi, cloud (AWS/GCP) mi?
-- Gerçek zamanlı: WebSocket (STOMP) mi, SSE mi?
+| Karar | Seçim |
+|-------|-------|
+| Veritabanı | PostgreSQL |
+| Auth | JWT (kendi sistemi, Spring Security) |
+| Gerçek Zamanlı | Spring WebSocket + STOMP |
+| CI/CD | GitHub Actions |
+| Containerization | Docker + Docker Compose |
 
 ---
 
@@ -80,8 +84,15 @@ gerçek zamanlı ve çok platformlu bir board uygulaması.
 
 ```
 retroBoard/
-├── backend/        # Java Spring Boot
-├── frontend/       # React + Vite
-├── mobile/         # Flutter
-└── docs/           # API dokümantasyonu
+├── backend/            # Java 21 + Spring Boot 3
+│   └── src/
+├── frontend/           # React + Vite + TypeScript
+│   └── src/
+├── mobile/             # Flutter
+│   └── lib/
+├── docs/               # API dokümantasyonu
+├── .github/
+│   └── workflows/      # GitHub Actions CI/CD
+├── docker-compose.yml  # Lokal geliştirme ortamı
+└── REQUIREMENTS.md
 ```
