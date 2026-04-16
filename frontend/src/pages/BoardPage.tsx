@@ -210,7 +210,7 @@ export default function BoardPage() {
               </div>
 
               {/* Kartlar */}
-              <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '120px' }}>
+              <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
                 {cards.length === 0 ? (
                   <div style={{ padding: '28px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '26px', opacity: 0.25 }}>{col.emoji}</span>
