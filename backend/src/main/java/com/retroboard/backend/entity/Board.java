@@ -35,6 +35,10 @@ public class Board {
     @Builder.Default
     private List<Card> cards = new ArrayList<>();
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Builder.Default
+    private boolean revealed = false;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

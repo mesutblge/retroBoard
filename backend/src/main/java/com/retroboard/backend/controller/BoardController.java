@@ -1,5 +1,6 @@
 package com.retroboard.backend.controller;
 
+import com.retroboard.backend.dto.request.CardOrderRequest;
 import com.retroboard.backend.dto.request.CreateBoardRequest;
 import com.retroboard.backend.dto.request.CreateCardRequest;
 import com.retroboard.backend.dto.response.BoardResponse;
@@ -50,6 +51,21 @@ public class BoardController {
                                                  @Valid @RequestBody CreateCardRequest request,
                                                  @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(boardService.addCard(boardId, request, user));
+    }
+
+    @PostMapping("/{boardId}/reveal")
+    public ResponseEntity<Void> toggleReveal(@PathVariable Long boardId,
+                                              @AuthenticationPrincipal User user) {
+        boardService.toggleReveal(boardId, user);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{boardId}/cards/reorder")
+    public ResponseEntity<Void> reorderCards(@PathVariable Long boardId,
+                                              @RequestBody List<CardOrderRequest> orders,
+                                              @AuthenticationPrincipal User user) {
+        boardService.reorderCards(boardId, orders, user);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/cards/{cardId}/vote")

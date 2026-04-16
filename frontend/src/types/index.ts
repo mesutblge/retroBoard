@@ -17,8 +17,10 @@ export interface Card {
   content: string
   columnType: ColumnType
   voteCount: number
+  sortOrder: number
   createdBy: string
   anonymous: boolean
+  mine: boolean
   createdAt: string
 }
 
@@ -27,6 +29,7 @@ export interface Board {
   name: string
   teamId: number
   teamName: string
+  revealed: boolean
   createdAt: string
   cards: Card[]
 }

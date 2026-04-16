@@ -13,3 +13,7 @@ export const voteCard = (cardId: number) =>
   api.post<Card>(`/boards/cards/${cardId}/vote`)
 export const deleteCard = (cardId: number) =>
   api.delete(`/boards/cards/${cardId}`)
+export const reorderCards = (boardId: number, orders: { cardId: number; sortOrder: number }[]) =>
+  api.put(`/boards/${boardId}/cards/reorder`, orders)
+export const toggleReveal = (boardId: number) =>
+  api.post(`/boards/${boardId}/reveal`)

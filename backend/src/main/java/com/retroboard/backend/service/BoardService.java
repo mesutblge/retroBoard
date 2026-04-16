@@ -1,5 +1,6 @@
 package com.retroboard.backend.service;
 
+import com.retroboard.backend.dto.request.CardOrderRequest;
 import com.retroboard.backend.dto.request.CreateBoardRequest;
 import com.retroboard.backend.dto.request.CreateCardRequest;
 import com.retroboard.backend.dto.response.BoardResponse;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +67,7 @@ public class BoardService {
         if (!board.getTeam().getCompany().getId().equals(user.getCompany().getId())) {
             throw new SecurityException("Bu boarda erisim yetkiniz yok.");
         }
-        return BoardResponse.from(board);
+        return BoardResponse.from(board, user.getId());
     }
 
     @Transactional
@@ -89,17 +91,24 @@ public class BoardService {
             throw new SecurityException("Bu boarda erisim yetkiniz yok.");
         }
 
+        int maxSort = board.getCards().stream()
+                .filter(c -> c.getColumnType() == request.columnType())
+                .mapToInt(Card::getSortOrder)
+                .max()
+                .orElse(-1) + 1;
+
         Card card = Card.builder()
                 .content(request.content())
                 .columnType(request.columnType())
                 .anonymous(request.anonymous())
+                .sortOrder(maxSort)
                 .board(board)
                 .createdBy(user)
                 .build();
 
-        CardResponse response = CardResponse.from(cardRepository.save(card));
-        messagingTemplate.convertAndSend("/topic/board/" + boardId, response);
-        return response;
+        Card saved = cardRepository.save(card);
+        messagingTemplate.convertAndSend("/topic/board/" + boardId, CardResponse.from(saved));
+        return CardResponse.from(saved, user.getId());
     }
 
     @Transactional
@@ -110,6 +119,40 @@ public class BoardService {
         CardResponse response = CardResponse.from(cardRepository.save(card));
         messagingTemplate.convertAndSend("/topic/board/" + card.getBoard().getId(), response);
         return response;
+    }
+
+    @Transactional
+    public void toggleReveal(Long boardId, User user) {
+        if (!user.isAdmin()) {
+            throw new SecurityException("Yalnizca admin kartlari gosterip gizleyebilir.");
+        }
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Board bulunamadi: " + boardId));
+        if (!board.getTeam().getCompany().getId().equals(user.getCompany().getId())) {
+            throw new SecurityException("Bu boarda erisim yetkiniz yok.");
+        }
+        board.setRevealed(!board.isRevealed());
+        boardRepository.save(board);
+        messagingTemplate.convertAndSend("/topic/board/" + boardId,
+                Map.of("type", "board_revealed", "revealed", board.isRevealed()));
+    }
+
+    @Transactional
+    public void reorderCards(Long boardId, List<CardOrderRequest> orders, User user) {
+        if (!user.isAdmin()) {
+            throw new SecurityException("Yalnizca admin kart sirasini degistirebilir.");
+        }
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Board bulunamadi: " + boardId));
+        if (!board.getTeam().getCompany().getId().equals(user.getCompany().getId())) {
+            throw new SecurityException("Bu boarda erisim yetkiniz yok.");
+        }
+        orders.forEach(o -> cardRepository.findById(o.cardId()).ifPresent(card -> {
+            card.setSortOrder(o.sortOrder());
+            cardRepository.save(card);
+        }));
+        messagingTemplate.convertAndSend("/topic/board/" + boardId,
+                Map.of("type", "reorder", "orders", orders));
     }
 
     @Transactional
@@ -124,6 +167,7 @@ public class BoardService {
 
         Long boardId = card.getBoard().getId();
         cardRepository.delete(card);
-        messagingTemplate.convertAndSend("/topic/board/" + boardId, "card_deleted:" + cardId);
+        messagingTemplate.convertAndSend("/topic/board/" + boardId,
+                Map.of("type", "card_deleted", "cardId", cardId));
     }
 }

@@ -33,6 +33,10 @@ public class Card {
     @Builder.Default
     private int voteCount = 0;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private int sortOrder = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;

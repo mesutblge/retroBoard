@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
 
-    public enum Role { ADMIN, USER }
+    public enum Role { SUPER_ADMIN, ADMIN, USER }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +52,7 @@ public class User implements UserDetails {
     }
 
     public boolean isAdmin() {
-        return role == Role.ADMIN;
+        return role == Role.ADMIN || role == Role.SUPER_ADMIN;
     }
 
     public Long getCompanyId() {
