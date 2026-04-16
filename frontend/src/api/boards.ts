@@ -1,7 +1,7 @@
 import api from './axios'
 import type { Board, Card, ColumnType } from '../types'
 
-export const getBoards = () => api.get<Board[]>('/boards')
+export const getBoards = () => api.get<Board[]>('/boards') // tüm kullanıcılar tüm boardları görür
 export const getBoard = (id: number) => api.get<Board>(`/boards/${id}`)
 export const createBoard = (name: string, sprintName: string) =>
   api.post<Board>('/boards', { name, sprintName })

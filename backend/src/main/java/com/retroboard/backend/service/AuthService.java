@@ -27,15 +27,19 @@ public class AuthService {
             throw new EmailAlreadyExistsException("Email already in use: " + request.email());
         }
 
+        // İlk kaydolan kullanıcı admin olur
+        boolean isFirst = userRepository.count() == 0;
+
         User user = User.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .fullName(request.fullName())
+                .role(isFirst ? User.Role.ADMIN : User.Role.USER)
                 .build();
 
         userRepository.save(user);
         String token = jwtUtil.generateToken(user);
-        return new AuthResponse(token, user.getEmail(), user.getFullName());
+        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -45,6 +49,6 @@ public class AuthService {
 
         User user = userRepository.findByEmail(request.email()).orElseThrow();
         String token = jwtUtil.generateToken(user);
-        return new AuthResponse(token, user.getEmail(), user.getFullName());
+        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole());
     }
 }

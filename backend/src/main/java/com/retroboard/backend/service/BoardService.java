@@ -26,6 +26,9 @@ public class BoardService {
     private final SimpMessagingTemplate messagingTemplate;
 
     public BoardResponse createBoard(CreateBoardRequest request, User user) {
+        if (!user.isAdmin()) {
+            throw new SecurityException("Yalnızca admin board oluşturabilir.");
+        }
         Board board = Board.builder()
                 .name(request.name())
                 .sprintName(request.sprintName())
@@ -34,8 +37,9 @@ public class BoardService {
         return BoardResponse.from(boardRepository.save(board));
     }
 
-    public List<BoardResponse> getMyBoards(User user) {
-        return boardRepository.findByCreatedByOrderByCreatedAtDesc(user)
+    // Tüm kullanıcılar tüm boardları görür
+    public List<BoardResponse> getAllBoards() {
+        return boardRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
                 .map(BoardResponse::from)
                 .toList();
@@ -49,11 +53,11 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long boardId, User user) {
+        if (!user.isAdmin()) {
+            throw new SecurityException("Yalnızca admin board silebilir.");
+        }
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ResourceNotFoundException("Board not found: " + boardId));
-        if (!board.getCreatedBy().getId().equals(user.getId())) {
-            throw new SecurityException("Not authorized to delete this board");
-        }
         boardRepository.delete(board);
     }
 
@@ -75,7 +79,7 @@ public class BoardService {
     }
 
     @Transactional
-    public CardResponse voteCard(Long cardId, User user) {
+    public CardResponse voteCard(Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found: " + cardId));
         card.setVoteCount(card.getVoteCount() + 1);
@@ -88,9 +92,12 @@ public class BoardService {
     public void deleteCard(Long cardId, User user) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found: " + cardId));
-        if (!card.getCreatedBy().getId().equals(user.getId())) {
-            throw new SecurityException("Not authorized to delete this card");
+
+        boolean isOwner = card.getCreatedBy().getId().equals(user.getId());
+        if (!isOwner && !user.isAdmin()) {
+            throw new SecurityException("Bu kartı silme yetkiniz yok.");
         }
+
         Long boardId = card.getBoard().getId();
         cardRepository.delete(card);
         messagingTemplate.convertAndSend("/topic/board/" + boardId, "card_deleted:" + cardId);

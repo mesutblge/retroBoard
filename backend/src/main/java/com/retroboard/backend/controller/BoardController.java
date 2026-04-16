@@ -28,8 +28,8 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardResponse>> getMyBoards(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(boardService.getMyBoards(user));
+    public ResponseEntity<List<BoardResponse>> getAllBoards() {
+        return ResponseEntity.ok(boardService.getAllBoards());
     }
 
     @GetMapping("/{boardId}")
@@ -52,9 +52,8 @@ public class BoardController {
     }
 
     @PostMapping("/cards/{cardId}/vote")
-    public ResponseEntity<CardResponse> voteCard(@PathVariable Long cardId,
-                                                  @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(boardService.voteCard(cardId, user));
+    public ResponseEntity<CardResponse> voteCard(@PathVariable Long cardId) {
+        return ResponseEntity.ok(boardService.voteCard(cardId));
     }
 
     @DeleteMapping("/cards/{cardId}")

@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const [sprintName, setSprintName] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { fullName, logout } = useAuth()
+  const { fullName, logout, isAdmin } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => { getBoards().then(res => setBoards(res.data)) }, [])
@@ -94,13 +94,15 @@ export default function DashboardPage() {
             <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'white', margin: 0 }}>Boardlarım</h2>
             <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Sprint retrospektiflerini yönet</p>
           </div>
-          <button onClick={() => setShowForm(!showForm)}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 22px', borderRadius: '14px', background: 'linear-gradient(135deg, #a855f7, #6366f1)', color: 'white', fontSize: '14px', fontWeight: 700, cursor: 'pointer', border: 'none', boxShadow: '0 8px 25px rgba(168,85,247,0.35)', transition: 'all 0.2s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 35px rgba(168,85,247,0.5)'}
-            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 25px rgba(168,85,247,0.35)'}>
-            <span style={{ fontSize: '18px', lineHeight: 1 }}>+</span>
-            Yeni Board
-          </button>
+          {isAdmin && (
+            <button onClick={() => setShowForm(!showForm)}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 22px', borderRadius: '14px', background: 'linear-gradient(135deg, #a855f7, #6366f1)', color: 'white', fontSize: '14px', fontWeight: 700, cursor: 'pointer', border: 'none', boxShadow: '0 8px 25px rgba(168,85,247,0.35)', transition: 'all 0.2s' }}
+              onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 35px rgba(168,85,247,0.5)'}
+              onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 25px rgba(168,85,247,0.35)'}>
+              <span style={{ fontSize: '18px', lineHeight: 1 }}>+</span>
+              Yeni Board
+            </button>
+          )}
         </div>
 
         {/* Yeni board formu */}
@@ -153,12 +155,14 @@ export default function DashboardPage() {
                   <div style={{ width: '46px', height: '46px', borderRadius: '13px', background: 'linear-gradient(135deg, rgba(168,85,247,0.25), rgba(99,102,241,0.25))', border: '1px solid rgba(168,85,247,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>
                     📋
                   </div>
-                  <button onClick={e => { e.stopPropagation(); handleDelete(board.id) }}
-                    style={{ width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#475569', background: 'transparent', border: 'none', cursor: 'pointer', transition: 'all 0.2s', lineHeight: 1 }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.15)'; (e.currentTarget as HTMLButtonElement).style.color = '#f87171' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#475569' }}>
-                    ×
-                  </button>
+                  {isAdmin && (
+                    <button onClick={e => { e.stopPropagation(); handleDelete(board.id) }}
+                      style={{ width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#475569', background: 'transparent', border: 'none', cursor: 'pointer', transition: 'all 0.2s', lineHeight: 1 }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.15)'; (e.currentTarget as HTMLButtonElement).style.color = '#f87171' }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#475569' }}>
+                      ×
+                    </button>
+                  )}
                 </div>
 
                 <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'white', marginBottom: '8px', lineHeight: 1.4 }}>

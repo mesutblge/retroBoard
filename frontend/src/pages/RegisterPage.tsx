@@ -18,7 +18,7 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       const res = await register(email, password, fullName)
-      setAuth(res.data.token, res.data.email, res.data.fullName)
+      setAuth(res.data.token, res.data.email, res.data.fullName, res.data.role)
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.error || 'Kayıt başarısız.')

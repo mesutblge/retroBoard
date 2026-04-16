@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 import { getBoard, addCard, voteCard, deleteCard } from '../api/boards'
@@ -55,6 +56,7 @@ export default function BoardPage() {
   const { id } = useParams<{ id: string }>()
   const boardId = Number(id)
   const navigate = useNavigate()
+  const { isAdmin, email } = useAuth()
   const [board, setBoard] = useState<Board | null>(null)
   const [newCard, setNewCard] = useState<{ [k in ColumnType]?: string }>({})
   const stompRef = useRef<Client | null>(null)
@@ -199,7 +201,12 @@ export default function BoardPage() {
                     <span style={{ fontSize: '12px', color: '#475569' }}>Henüz kart yok</span>
                   </div>
                 ) : cards.map(card => (
-                  <CardItem key={card.id} card={card} accent={col.accent} cardBg={col.cardBg} border={col.border} onVote={() => voteCard(card.id)} onDelete={() => deleteCard(card.id)} />
+                  <CardItem
+                    key={card.id} card={card} accent={col.accent} cardBg={col.cardBg} border={col.border}
+                    canDelete={isAdmin || card.createdBy === email}
+                    onVote={() => voteCard(card.id)}
+                    onDelete={() => deleteCard(card.id)}
+                  />
                 ))}
               </div>
 
@@ -244,11 +251,12 @@ export default function BoardPage() {
   )
 }
 
-function CardItem({ card, accent, cardBg, border, onVote, onDelete }: {
+function CardItem({ card, accent, cardBg, border, canDelete, onVote, onDelete }: {
   card: Card
   accent: string
   cardBg: string
   border: string
+  canDelete: boolean
   onVote: () => void
   onDelete: () => void
 }) {
@@ -280,7 +288,7 @@ function CardItem({ card, accent, cardBg, border, onVote, onDelete }: {
           }}>
             👍 {card.voteCount}
           </button>
-          {hovered && (
+          {hovered && canDelete && (
             <button onClick={onDelete} style={{
               width: '28px', height: '28px', borderRadius: '8px', border: 'none',
               background: 'rgba(239,68,68,0.12)', color: '#f87171',

@@ -1,7 +1,10 @@
+export type Role = 'ADMIN' | 'USER'
+
 export interface AuthResponse {
   token: string
   email: string
   fullName: string
+  role: Role
 }
 
 export type ColumnType = 'WENT_WELL' | 'TO_IMPROVE' | 'ACTION_ITEMS'

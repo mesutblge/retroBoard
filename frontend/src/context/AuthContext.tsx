@@ -1,10 +1,14 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
+type Role = 'ADMIN' | 'USER'
+
 interface AuthContextType {
   token: string | null
   fullName: string | null
   email: string | null
-  setAuth: (token: string, email: string, fullName: string) => void
+  role: Role | null
+  isAdmin: boolean
+  setAuth: (token: string, email: string, fullName: string, role: Role) => void
   logout: () => void
 }
 
@@ -14,25 +18,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
   const [email, setEmail] = useState<string | null>(localStorage.getItem('email'))
   const [fullName, setFullName] = useState<string | null>(localStorage.getItem('fullName'))
+  const [role, setRole] = useState<Role | null>(localStorage.getItem('role') as Role | null)
 
-  const setAuth = (t: string, e: string, fn: string) => {
+  const setAuth = (t: string, e: string, fn: string, r: Role) => {
     localStorage.setItem('token', t)
     localStorage.setItem('email', e)
     localStorage.setItem('fullName', fn)
-    setToken(t)
-    setEmail(e)
-    setFullName(fn)
+    localStorage.setItem('role', r)
+    setToken(t); setEmail(e); setFullName(fn); setRole(r)
   }
 
   const logout = () => {
     localStorage.clear()
-    setToken(null)
-    setEmail(null)
-    setFullName(null)
+    setToken(null); setEmail(null); setFullName(null); setRole(null)
   }
 
   return (
-    <AuthContext.Provider value={{ token, email, fullName, setAuth, logout }}>
+    <AuthContext.Provider value={{ token, email, fullName, role, isAdmin: role === 'ADMIN', setAuth, logout }}>
       {children}
     </AuthContext.Provider>
   )

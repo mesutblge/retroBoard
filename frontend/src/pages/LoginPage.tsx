@@ -17,7 +17,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const res = await login(email, password)
-      setAuth(res.data.token, res.data.email, res.data.fullName)
+      setAuth(res.data.token, res.data.email, res.data.fullName, res.data.role)
       navigate('/')
     } catch {
       setError('Email veya şifre hatalı.')
